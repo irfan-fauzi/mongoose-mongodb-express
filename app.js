@@ -19,11 +19,7 @@ app.get('/contact', async(req, res) => {
 
 app.get('/contact/:name', async(req, res) => {
   const name = req.params.name
-  const allDataContact = await Contact.find()
-  const select = allDataContact.filter(el => {
-    return el.name === name
-  })
-  const detail = select[0]
+  const detail = await Contact.findOne({name})
   res.render('detail-page', { detail })
 })
 
