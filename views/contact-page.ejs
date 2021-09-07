@@ -2,7 +2,41 @@
 <%- include('layouts/navbar') %>
 
 <h1>Halaman Contact</h1>
-<h2>judul</h2>
-<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius quo modi aperiam nesciunt ullam officia amet dolorem earum eum sit natus fuga iste quibusdam, voluptates autem esse illum dolorum ratione?</p>
+<main class="detail-container">
+  <div class="container">
+   
+    <div class="row">
+      <div class="col-md-8">
+        
+        <h1 class="title">Daftar kontak</h1>
+        <a href="/contact/add" class="btn btn-primary">Tambah data</a>
+        <% if (allDataContact.length === 0) { %>
+         <h1>😿 data tidak ada</h1>
+        <% } else { %>
+  
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Nama</th>
+              <th scope="col">Email</th>
+              <th scope="col">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% allDataContact.forEach((contact, i) => { %>
+              <tr>
+                <th scope="row"><%= i + 1 %> </th>
+                <td><%= contact.name %> </td>
+                <td><%= contact.email %>  </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <% } %> 
+      </div>
+    </div>
+  </div>
+  </main>
 
 <%- include('layouts/footer') %> 
