@@ -22,24 +22,18 @@ app.get('/contact/add', (req,res) => {
   res.render('add-page')
 })
 
-app.post('/contact', [
-  body('name').custom(async(name) => {
-    const allDataContact = await Contact.find()
-    const isDuplicate = allDataContact.find(contact => contact.name === name)
-    if(isDuplicate){
-      throw new Error('Nama kontak sudah terdaftar')
-    }
-  }),
-  check('email', 'masukan email tidak valid').isEmail
-  ], (req, res) => {
+app.post('/contact', 
+  check('email', 'email tidak valid').isEmail(),
+  (req, res) => {
     const errors = validationResult(req)
     if(!errors.isEmpty()){
       const error = errors.array()
       res.render('add-page', { error })
     } else {
-      console.log('ok masuk')
+      console.log('masuk')
     }
-})
+  } 
+)
 
 app.get('/contact/:name', async(req, res) => {
   const name = req.params.name
