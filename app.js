@@ -12,14 +12,14 @@ app.use(express.static('public'))
 const getAllContact = async() => {
   try {
     const contacts = await Contact.find()
-    readAllContact(contacts)
+    readAllContactSuccess(contacts)
   } catch (error) {
-    console.log(`ada kesalahan : ${error}`)
+    errorGetAllDataContact(`ada kesalahan di : ${error}`)
   }
 }
 
 
-const readAllContact = (allDataContact) => {
+const readAllContactSuccess = (allDataContact) => {
   app.get('/contact', (req, res) => {
     res.render('contact-page', {
       allDataContact
@@ -27,6 +27,13 @@ const readAllContact = (allDataContact) => {
   })
 }
 
+const errorGetAllDataContact = (erorMsg) => {
+  app.get('/contact', (req, res) => {
+    res.render('error-page', {
+      erorMsg
+    })
+  })
+} 
 
 
 app.get('/', (req, res) => {
