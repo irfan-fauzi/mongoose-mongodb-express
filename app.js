@@ -9,42 +9,31 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 // ----------------
 
-const getAllContact = async() => {
-  try {
-    const contacts = await Contact.find()
-    readAllContactSuccess(contacts)
-  } catch (error) {
-    errorGetAllDataContact(`ada kesalahan di : ${error}`)
-  }
-}
 
-
-const readAllContactSuccess = (allDataContact) => {
-  app.get('/contact', (req, res) => {
-    res.render('contact-page', {
-      allDataContact
-    })
+app.get('/contact', async(req, res) => {
+  const allDataContact = await Contact.find()
+  res.render('contact-page', {
+    allDataContact
   })
-}
+})
 
-const errorGetAllDataContact = (erorMsg) => {
-  app.get('/contact', (req, res) => {
-    res.render('error-page', {
-      erorMsg
-    })
+app.get('/contact/:name', async(req, res) => {
+  const name = req.params.name
+  const allDataContact = await Contact.find()
+  const select = allDataContact.filter(el => {
+    return el.name === name
   })
-} 
-
+  const detail = select[0]
+  res.render('detail-page', { detail })
+})
 
 app.get('/', (req, res) => {
   res.render('index')
 })  
 
-
-
 // server ---------------------------------------------
 app.listen(PORT, () => {
   console.log(`aplikasi sedang berjalan di : http://localhost:${PORT}`)
 })
-getAllContact()
+
 // ----------------------------------------------------

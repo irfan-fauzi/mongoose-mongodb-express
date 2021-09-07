@@ -29,6 +29,11 @@
                 <th scope="row"><%= i + 1 %> </th>
                 <td><%= contact.name %> </td>
                 <td><%= contact.email %>  </td>
+                <td>
+                  <a href="/contact/<%= contact.name %> " class="btn btn-success badge rounded">
+                    Detail
+                  </a>
+                </td>
               </tr>
             <% }) %>
           </tbody>
