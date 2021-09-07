@@ -1,4 +1,5 @@
 const express = require('express')
+const { body, validationResult, check } = require('express-validator')
 const app = express()
 require('./utils/mongoose-module.js')
 const { Contact } = require('./model/mContact.js')
@@ -15,6 +16,10 @@ app.get('/contact', async(req, res) => {
   res.render('contact-page', {
     allDataContact
   })
+})
+
+app.get('/contact/add', (req,res) => {
+  res.render('add-page')
 })
 
 app.get('/contact/:name', async(req, res) => {
