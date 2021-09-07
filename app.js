@@ -11,8 +11,8 @@ app.use(express.static('public'))
 
 const getAllContact = async() => {
   try {
-    const res = await Contact.find()
-    readAllContact(res)
+    const contacts = await Contact.find()
+    readAllContact(contacts)
   } catch (error) {
     console.log(`ada kesalahan : ${error}`)
   }
@@ -26,6 +26,8 @@ const readAllContact = (allDataContact) => {
     })
   })
 }
+
+
 
 app.get('/', (req, res) => {
   res.render('index')
