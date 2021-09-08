@@ -52,14 +52,10 @@ app.post('/contact', [
  })
 
 // DELETE
-
 app.delete('/contact', async(req, res) => {
   const idContact = req.body.id
-  const contacts = await Contact.findOne({ _id: idContact })
-  if(!contacts){ res.status(404).send('<h1>error</h1>')}
-  await Contact.deleteOne({ _id: contacts._id })
+  await Contact.deleteOne({ _id: idContact })
   res.redirect('/contact')
-  
 })
 //  DETAIL PAGE
 app.get('/contact/:name', async(req, res) => {
