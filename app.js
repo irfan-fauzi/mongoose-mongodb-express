@@ -66,6 +66,33 @@ app.get('/contact/edit/:name', async(req, res) => {
   res.render('update-page', {detail})
 })
 
+// UPDATE PROCESS
+app.put('/contact', [
+  body().custom(async(contact) => {
+    const isDuplicate = await Contact.findOne({name: contact.name})
+    const nameIsNotSame = contact.oldName !== contact.name
+    if(nameIsNotSame && isDuplicate){ throw new Error('Nama sudah tersedia')}
+    return true
+  }),
+  check('email', 'email tidak valid').isEmail()
+  ], async(req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+      const error = errors.array()
+      const detail = req.body
+      res.render('update-page', { error, detail })
+    } else {
+      try {
+        const targetID = req.body._id
+        await Contact.updateOne({ _id: targetID },{$set: { name: req.body.name, email: req.body.email }})
+        res.redirect('/contact')
+      } catch (error) {
+        console.log(`ada masalah ${error}`)
+      }
+    }
+})
+
+
 //  DETAIL PAGE
 app.get('/contact/:name', async(req, res) => {
   const name = req.params.name

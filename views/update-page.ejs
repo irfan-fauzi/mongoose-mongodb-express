@@ -5,9 +5,11 @@
 
   <div class="row">
     <div class="col-md-6">
-      <form class="form" method="POST" action="/contact/update">
+      <form class="form" method="POST" action="/contact?_method=PUT">
 
+        <input type="hidden" name="_id" value="<%= detail._id %>">
         <input type="hidden" name="oldName" value="<%= (detail.oldName) ? detail.oldName : detail.name %>">
+
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Nama anda</label>
           <input name="name" type="text" value="<%= detail.name %>"  class="form-control" id="name" aria-describedby="emailHelp" required>
