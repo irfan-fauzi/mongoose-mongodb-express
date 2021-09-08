@@ -43,9 +43,7 @@ app.post('/contact', [
    } else {
      const inputUser = req.body
      const insertNew = new Contact(inputUser)
-     insertNew.save().then(res => {
-       return res
-     })
+     insertNew.save().then()
      res.redirect('/contact') 
    }
    
@@ -54,11 +52,12 @@ app.post('/contact', [
 // DELETE
 app.get('/contact/delete/:name', async(req, res) => {
   const targetDeleted = req.params.name
-  if(!targetDeleted){
+  const contacts = await Contact.findOne({name: targetDeleted})
+  if(!contacts){
     res.status(404)
     res.send('<h1>404</h1>')
   } else {
-    await Contact.deleteOne({name: targetDeleted})
+    await Contact.deleteOne({ _id: contacts._id })
     res.redirect('/contact')
   }
 })
