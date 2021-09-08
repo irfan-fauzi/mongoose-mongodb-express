@@ -24,6 +24,8 @@ app.get('/contact', async(req, res) => {
 app.get('/contact/add', (req,res) => {
   res.render('add-page')
 })
+
+
 // ADD PROCESS
 app.post('/contact', [
   body('name').custom( async(name) => {
@@ -48,7 +50,6 @@ app.post('/contact', [
      insertNew.save().then()
      res.redirect('/contact') 
    }
-   
  })
 
 // DELETE
@@ -57,12 +58,21 @@ app.delete('/contact', async(req, res) => {
   await Contact.deleteOne({ _id: idContact })
   res.redirect('/contact')
 })
+
+// UPDATE PAGE
+app.get('/contact/edit/:name', async(req, res) => {
+  const idTarget = req.params.name
+  const detail = await Contact.findOne({ _id: idTarget })
+  res.render('update-page', {detail})
+})
+
 //  DETAIL PAGE
 app.get('/contact/:name', async(req, res) => {
   const name = req.params.name
   const detail = await Contact.findOne({name})
   res.render('detail-page', { detail })
 })
+
 
 // HOME PAGE
 app.get('/', (req, res) => {

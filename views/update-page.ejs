@@ -1,0 +1,43 @@
+<%- include('layouts/head')  %>
+<%- include('layouts/navbar') %> 
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-6">
+      <form class="form" method="POST" action="/contact/update">
+
+        <input type="hidden" name="oldName" value="<%= (detail.oldName) ? detail.oldName : detail.name %>">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Nama anda</label>
+          <input name="name" type="text" value="<%= detail.name %>"  class="form-control" id="name" aria-describedby="emailHelp" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Email</label>
+          <input name="email" type="email" class="form-control" id="email" required value="<%= detail.email %>">
+
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      </div>
+  
+      <button type="submit" class="btn btn-primary">Perbarui</button>
+      </form>
+      
+       <% if ( typeof error != 'undefined' ) { %>
+  
+          <div class="alert alert-danger" role="alert">
+            <ul>
+              <% error.forEach(err => { %>
+               <li><%= err.msg  %> </li>
+              <% }) %>
+            </ul>
+          </div>
+        
+      <% } %>
+       
+   
+    </div>
+  </div>
+</div>
+
+<%- include('layouts/footer') %>
