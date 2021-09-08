@@ -17,7 +17,12 @@
             <h5 class="card-title"><%= detail.name %></h5>
             <h6 class="card-subtitle mb-2 text-muted"><%= detail.email %></h6>
 
-            <a href="/contact/delete/<%= detail.name %>" class="btn btn-danger badge" onclick=" return confirm('apakah anda yakin ?')">Hapus</a>
+            <!--  -->
+
+            <form method="POST" action="/contact?_method=DELETE">
+              <input type="hidden" name="id" value="<%= detail._id %>">
+              <button type="submit" class="btn btn-danger badge" onclick="return confirm('anda yakin ?')">Delete</button>
+            </form>
 
             <a href="/contact/edit/<%= detail.name %>" class="btn btn-primary badge" >Edit</a>
 

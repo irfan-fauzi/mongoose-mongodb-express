@@ -1,4 +1,5 @@
 const express = require('express')
+const methodOverride = require('method-override')
 const { body, validationResult, check } = require('express-validator')
 const app = express()
 require('./utils/mongoose-module.js')
@@ -6,6 +7,7 @@ const { Contact } = require('./model/mContact.js')
 const PORT = 3000
 
 // set view engine
+app.use(methodOverride('_method'))
 app.set('view engine', 'ejs')
 app.use(express.urlencoded())
 // ----------------
@@ -50,18 +52,15 @@ app.post('/contact', [
  })
 
 // DELETE
-app.get('/contact/delete/:name', async(req, res) => {
-  const targetDeleted = req.params.name
-  const contacts = await Contact.findOne({name: targetDeleted})
-  if(!contacts){
-    res.status(404)
-    res.send('<h1>404</h1>')
-  } else {
-    await Contact.deleteOne({ _id: contacts._id })
-    res.redirect('/contact')
-  }
-})
 
+app.delete('/contact', async(req, res) => {
+  const idContact = req.body.id
+  const contacts = await Contact.findOne({ _id: idContact })
+  if(!contacts){ res.status(404).send('<h1>error</h1>')}
+  await Contact.deleteOne({ _id: contacts._id })
+  res.redirect('/contact')
+  
+})
 //  DETAIL PAGE
 app.get('/contact/:name', async(req, res) => {
   const name = req.params.name
