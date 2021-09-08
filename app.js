@@ -7,10 +7,10 @@ const PORT = 3000
 
 // set view engine
 app.set('view engine', 'ejs')
-app.use(express.static('public'))
+app.use(express.urlencoded())
 // ----------------
 
-
+// CONTACT PAGE
 app.get('/contact', async(req, res) => {
   const allDataContact = await Contact.find()
   res.render('contact-page', {
@@ -18,34 +18,64 @@ app.get('/contact', async(req, res) => {
   })
 })
 
+// ADD FORM PAGE
 app.get('/contact/add', (req,res) => {
   res.render('add-page')
 })
+// ADD PROCESS
+app.post('/contact', [
+  body('name').custom( async(name) => {
+   const isDuplicate = await Contact.findOne({name})
+   if(isDuplicate){
+     throw new Error('Nama kontak sudah terdaftar')
+   }
+   return true
+  }),
+  
+  check('email', 'email tidak valid')
+  .isEmail()],
+   (req, res) => {
+   const errors = validationResult(req);
+   if (!errors.isEmpty()) {
+     const error = errors.array()
+     res.render('add-page', { error })
+     
+   } else {
+     const inputUser = req.body
+     const insertNew = new Contact(inputUser)
+     insertNew.save().then(res => {
+       return res
+     })
+     res.redirect('/contact') 
+   }
+   
+ })
 
-app.post('/contact', 
-  check('email', 'email tidak valid').isEmail(),
-  (req, res) => {
-    const errors = validationResult(req)
-    if(!errors.isEmpty()){
-      const error = errors.array()
-      res.render('add-page', { error })
-    } else {
-      console.log('masuk')
-    }
-  } 
-)
+// DELETE
+app.get('/contact/delete/:name', async(req, res) => {
+  const targetDeleted = req.params.name
+  if(!targetDeleted){
+    res.status(404)
+    res.send('<h1>404</h1>')
+  } else {
+    await Contact.deleteOne({name: targetDeleted})
+    res.redirect('/contact')
+  }
+})
 
+//  DETAIL PAGE
 app.get('/contact/:name', async(req, res) => {
   const name = req.params.name
   const detail = await Contact.findOne({name})
   res.render('detail-page', { detail })
 })
 
+// HOME PAGE
 app.get('/', (req, res) => {
   res.render('index')
 })  
 
-// server ---------------------------------------------
+// SERVER ---------------------------------------------
 app.listen(PORT, () => {
   console.log(`aplikasi sedang berjalan di : http://localhost:${PORT}`)
 })
